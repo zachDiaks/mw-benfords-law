@@ -16,7 +16,7 @@ async def fetchAllURLS(playwright: Playwright, mainPage):
     
     # Find the valid URLs
     print(urls)
-    refPages = [extractBefore(mainPage, "referencelist") + url for url in urls if "ref/" in url]
+    refPages = [extractBefore(mainPage, "referencelist") + url for url in urls if "ref/" in url and not endsWith(url, "#refsect-extended-capabilities")]
 
     # Close browser
     await browser.close()
@@ -26,6 +26,9 @@ async def fetchAllURLS(playwright: Playwright, mainPage):
 def extractBefore(str, targetStr):
     idx = str.find(targetStr)
     return str[:idx]
+
+def endsWith(str, targetStr):
+    return str.find(targetStr) + len(targetStr) == len(str)
 
 async def main():
     async with async_playwright() as playwright:
