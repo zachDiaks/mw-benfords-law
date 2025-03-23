@@ -12,25 +12,25 @@ class WebpageProcessor:
     #----------- Setup -----------
     # Constructor 
     def __init__(self):
-        self.Webpage = None
         self.Browser = None
+        self.Playwright = None
+    
     # Set up class
-    async def setup(self, url):
-        p = await async_playwright().start()
-        self.Browser = await p.webkit.launch()
+    async def setup(self):
+        self.Playwright = await async_playwright().start()
+        self.Browser = await self.Playwright.webkit.launch()
+        
+
+    #----------- Processing Methods  -----------
+    async def getVisibleText(self, url):
+        page = await self.connectToPage(url)
+        soup = BeautifulSoup(await page.content(), "html.parser")
+        pageText = soup.get_text()
+        return pageText
+    
+    #---------- Helper Methods -----------------
+    async def connectToPage(self, url):
         page = await self.Browser.new_page()
         page.on("load", lambda: print("Loaded page: " + url))
         await page.goto(url)
-        self.Webpage = page
-    
-    # Clean up webpage
-    def __exit__(self):
-        self.Browser.close()
-
-    #----------- Processing Methods  -----------
-    async def getVisibleText(self):
-        soup = BeautifulSoup(await self.Webpage.content())
-        pageText = soup.findAll(text=True)
-        print('------------------------------------------')
-        print(pageText)
-        print('------------------------------------------')
+        return page
