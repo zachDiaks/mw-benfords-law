@@ -4,7 +4,6 @@ WebpageProcessor: Utility class to handle processing of the HTML of certain webp
                     1) Find all text in a page that should be visible to a user
                     2) Find all numbers in a page that should be visible to a user
 '''
-import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 
