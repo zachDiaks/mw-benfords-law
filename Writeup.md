@@ -1,5 +1,9 @@
 # Using power laws as an excuse to learn web scraping
-In undergrad I studied physics, where power laws are everywhere. Newton's law of gravitation was probably the first one I encountered:
+In undergrad I studied physics, where power laws are everywhere! Power laws dictate the motion of planets, sound intensity at different distances from a source, the relationship between kinetic energy and speed, and countless other laws named after some ancient dudes.
+
+While they may sound complicated, power laws are actually quite simple. They dictate that 
+
+ Newton's law of gravitation was probably the first one I encountered:
 $$ F_g = \frac{Gm_1m_2}{r^2} $$
 
 This equation tells us that the farther away two objects are from eachother, not only does the gravitational force between the two objects gets weaker, the *rate* at which it gets weaker increases. This can be simply shown like so:
