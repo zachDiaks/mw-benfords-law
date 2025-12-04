@@ -13,17 +13,18 @@ class Plotter:
         plt.ylabel("Count")
         plt.bar(nums, numCounts)
 
-    def plotDigitDistribution(self, digitCounts):
-        digits = np.linspace(0, 9, 10)
+    def plotDigitDistribution(self, digitCounts, sorted=False):
+        digits = np.linspace(1, 9, 9)
         digits = [str(int(x)) for x in digits]
 
         # Sort digits by frequency
-        [sortedCounts, sortedDigits] = self.sortLists(digitCounts, digits)
+        if sorted:
+            [digitCounts, digits] = self.sortLists(digitCounts, digits)
 
         plt.title("First digit distribution")
         plt.xlabel("Digit")
         plt.ylabel("Count")
-        plt.bar(sortedDigits, sortedCounts)
+        plt.bar(digits, digitCounts)
 
     def plotWordDistribution(self, wordCounts, numWords="All", asBar=True):
         # Sort word counts
