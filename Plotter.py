@@ -13,7 +13,7 @@ class Plotter:
         plt.ylabel("Count")
         plt.bar(nums, numCounts)
 
-    def plotDigitDistribution(self, digitCounts, sorted=False):
+    def plotDigitDistribution(self, digitCounts, expDistribution, sorted=False):
         digits = np.linspace(1, 9, 9)
         digits = [str(int(x)) for x in digits]
 
@@ -21,31 +21,50 @@ class Plotter:
         if sorted:
             [digitCounts, digits] = self.sortLists(digitCounts, digits)
 
+        # Compute expected frequency
+        expFrequency = expDistribution / 100 * np.sum(digitCounts)
+
         plt.title("First digit distribution")
         plt.xlabel("Digit")
         plt.ylabel("Count")
-        plt.bar(digits, digitCounts)
+        plt.bar(digits, digitCounts, label="Actual Digit Count")
+        plt.plot(digits, expFrequency, label="Expected Digit Count", color="orange", marker="o")
 
-    def plotWordDistribution(self, wordCounts, numWords="All", asBar=True):
+        plt.legend()
+    def plotWordDistribution(self, wordCounts, wordRange="All", asBar=True):
         # Sort word counts
         wordCounts.sort(reverse=True)
 
         # Truncate to top number of hts if requested
-        if numWords != "All":
-            wordCounts = wordCounts[0:numWords+1]
-        
-        rank = list(range(1, len(wordCounts) + 1)) #np.linspace(1.0, len(wordCounts), len(wordCounts))
+        if wordRange != "All":
+            wordCounts = wordCounts[wordRange[0]-1:wordRange[1]]
+            rank = np.linspace(wordRange[0], wordRange[1], wordRange[1] - wordRange[0] + 1)
+        else:
+            rank = list(range(1, len(wordCounts) + 1)) #np.linspace(1.0, len(wordCounts), len(wordCounts))
 
         # Make plot
         plt.title("Word distribution")
         plt.xlabel("Word rank")
+        plt.ylabel("Word frequency")
         if asBar:
             plt.bar(rank, wordCounts)
             plt.ylim((0, max(wordCounts)))
+            return 0
         else:
-            plt.plot(rank, wordCounts)
+            # Plot word count distribution
+            plt.plot(rank, wordCounts, label="Word frequency")
+
+            # Fit word log of word frequency to a line
+            logCounts = np.log10(wordCounts)
+            logRank = np.log10(rank)
+            fit = np.polyfit(logRank, logCounts, 1)
+            fitX = rank
+            fitY = pow(fitX, fit[0]) * pow(10, fit[1])
+            plt.plot(fitX, fitY, label="Zipfian Fit")
             plt.xscale('log')
             plt.yscale('log')
+            plt.legend()
+            return fit
 
 
     def plotLetterDistribution(self, letterCounts, sorted=False):
